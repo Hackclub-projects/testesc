@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>WebXR Gamepad Test Room</title>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aframe-htmlembed-component@1.0.0/dist/aframe-htmlembed-component.min.js"></script>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #07070c;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      }
+
+      #hud {
+        position: fixed;
+        left: 50%;
+        bottom: 16px;
+        transform: translateX(-50%);
+        color: #eee;
+        background: rgba(0, 0, 0, 0.7);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 12px;
+        padding: 10px 14px;
+        font-size: 14px;
+        z-index: 10;
+      }
+
+      #hud kbd {
+        background: #222;
+        border: 1px solid #666;
+        border-bottom-width: 2px;
+        border-radius: 4px;
+        padding: 1px 4px;
+      }
+
+      .tv-content {
+        width: 1920px;
+        height: 1080px;
+        background: #050505;
+        border: 10px solid #101010;
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+      }
+
+      .tv-content iframe {
+        border: 0;
+        width: 100%;
+        height: 100%;
+        background: #111;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="hud">
+      Desktop: drag to look • WASD to move • Enter VR with your headset button.
+      Point at the TV with your controller ray to interact.
+    </div>
+
+    <a-scene
+      renderer="colorManagement: true"
+      webxr="requiredFeatures: local-floor"
+      background="color: #06070a"
+    >
+      <a-assets>
+        <a-mixin id="wall-material" material="color: #1a1e28; roughness: 0.95"></a-mixin>
+      </a-assets>
+
+      <a-entity id="rig" position="0 1.6 4">
+        <a-camera wasd-controls="acceleration: 35">
+          <a-cursor
+            raycaster="objects: .interactive"
+            fuse="false"
+            material="color: #7bdff2; shader: flat"
+          ></a-cursor>
+        </a-camera>
+        <a-entity
+          laser-controls="hand: left"
+          raycaster="objects: .interactive"
+          line="color: #7bdff2"
+        ></a-entity>
+        <a-entity
+          laser-controls="hand: right"
+          raycaster="objects: .interactive"
+          line="color: #7bdff2"
+        ></a-entity>
+      </a-entity>
+
+      <a-box mixin="wall-material" position="0 2.5 -8" depth="0.2" height="5" width="16"></a-box>
+      <a-box mixin="wall-material" position="-8 2.5 0" depth="16" height="5" width="0.2"></a-box>
+      <a-box mixin="wall-material" position="8 2.5 0" depth="16" height="5" width="0.2"></a-box>
+      <a-box mixin="wall-material" position="0 2.5 8" depth="0.2" height="5" width="16"></a-box>
+      <a-plane color="#2e2f35" rotation="-90 0 0" width="16" height="16"></a-plane>
+      <a-plane color="#13151b" rotation="90 0 0" width="16" height="16" position="0 5 0"></a-plane>
+
+      <a-box color="#101114" position="0 1 -6.95" width="11" height="4" depth="0.45"></a-box>
+      <a-entity
+        class="interactive"
+        htmlembed="ppu: 260"
+        position="0 2.2 -6.7"
+        scale="5.2 2.95 1"
+      >
+        <div class="tv-content">
+          <iframe
+            src="https://hardwaretester.com/gamepad"
+            allow="gamepad; xr-spatial-tracking; fullscreen"
+            referrerpolicy="strict-origin-when-cross-origin"
+            title="Hardware Tester Gamepad"
+          ></iframe>
+        </div>
+      </a-entity>
+
+      <a-light type="ambient" intensity="0.45" color="#dce7ff"></a-light>
+      <a-light type="point" intensity="0.8" color="#ffffff" position="0 4 0"></a-light>
+      <a-light type="point" intensity="0.35" color="#6ba3ff" position="0 1 -6"></a-light>
+    </a-scene>
+  </body>
+</html>
